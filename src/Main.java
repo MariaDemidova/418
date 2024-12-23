@@ -14,7 +14,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        ConsoleUI ui = new ConsoleUI(new GetFromManual(generator), new Print(generator));
+        ConsoleUI ui = new ConsoleUI(new GetFromManual(generator), new Print(generator), new GetFromRandom(generator));
         ui.run();
     }
 }

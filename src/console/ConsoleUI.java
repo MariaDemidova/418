@@ -1,8 +1,9 @@
 package console;
 
 import action.GetFromManual;
+import action.GetFromRandom;
+import action.IAction;
 import action.Print;
-import generator.Generator;
 
 import java.util.*;
 
@@ -15,16 +16,17 @@ public class ConsoleUI {
     private static final String EXIT = "0";
     private static final String ASK_CHOICE_METHOD = "Выберете способ заполнения массива: 1 - из файла, 2 - рандомно, 3 - вручную";
     private static final String ASK_LENGTH_ARR = "Задайте длину массива";
-    private MethodsForUI methodsForUI = new MethodsForUI();
+    private FillArrayByManualMethods methodsForUI = new FillArrayByManualMethods();
     private GetFromManual getFromManual;
+    GetFromRandom getFromRandom;
     private Print print;
     private final Scanner scanner = new Scanner(System.in);
-    private List<String> emptyParams = new ArrayList<>();
+    IAction action;
 
 
-    public ConsoleUI(GetFromManual getFromManual, Print print) {
-
+    public ConsoleUI(GetFromManual getFromManual, Print print, GetFromRandom getFromRandom) {
         this.getFromManual = getFromManual;
+        this.getFromRandom = getFromRandom;
         this.print = print;
     }
 
@@ -47,7 +49,7 @@ public class ConsoleUI {
             printMenu();
             userAnswer = scanner.nextLine().strip().toLowerCase();
             switch (userAnswer) {
-                case FILL_ARR -> addArrOfParams();
+                case FILL_ARR -> createArray();
                 case PRINT_ARR -> printArray();
                 case SORT_ARR -> System.out.println("заглушка сортировать массив");
                 case EXIT -> {
@@ -97,7 +99,7 @@ public class ConsoleUI {
         return getTypeArray();
     }
 
-    public void addArrOfParams() {
+    public void createArray() {
         String typeArr = null;
         Integer length = 0;
         String getMethod = getMethodOfFillArray();
@@ -117,8 +119,14 @@ public class ConsoleUI {
         }
     }
 
-    private void addRandom(String typeArr, Integer lenghtArr) {
-        System.out.println("rand");
+    private void addRandom(String typeArr, int length) {
+       // String typeArr = getTypeArray();
+      //  Integer length = getLenghtArr();
+        Map<String, String> temp = new HashMap<>();
+        temp.put("type", typeArr);
+        temp.put("length", String.valueOf(length));
+        String status = getFromRandom.act(temp);
+        System.out.println(status);
     }
 
     private void addFile(String typeArr) {
@@ -135,6 +143,7 @@ public class ConsoleUI {
             }
             Map<String, String> entity = methodsForUI.getEntitiesParamsFromManual(typeArr);
             String status = getFromManual.act(entity);
+            System.out.println(status);
         }
 
     }

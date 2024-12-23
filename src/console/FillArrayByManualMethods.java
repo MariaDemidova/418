@@ -2,12 +2,11 @@ package console;
 
 import java.util.*;
 
-public class MethodsForUI {
+public class FillArrayByManualMethods {
 
     public Map<String, String> getFromManual(String param1, String param2, String param3, String type) {
         Scanner sc = new Scanner(System.in);
         Map<String, String> map = new HashMap<>();
-
 
         System.out.println("Введите " + param1);
         map.put(param1, sc.nextLine());

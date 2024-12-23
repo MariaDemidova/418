@@ -28,17 +28,17 @@ public class Generator {
 
     public void generateUser(Map<String, String> entity) {
         User user = new User();
-        user.setParam1(entity.get("Имя"));
-        user.setParam2(entity.get("Пароль"));
-        user.setParam3(entity.get("Почта"));
+        user.setParam1(entity.get("имя"));
+        user.setParam2(entity.get("пароль"));
+        user.setParam3(entity.get("почта"));
         users.add(user);
     }
 
     public void generateStudent(Map<String, String> entity) {
         Student student = new Student();
-        student.setParam1(entity.get("Номер группы"));
-        student.setParam2(entity.get("Средний балл"));
-        student.setParam3(entity.get("Номер зачетной книжки"));
+        student.setParam1(entity.get("номер группы"));
+        student.setParam2(entity.get("средний балл"));
+        student.setParam3(entity.get("номер зачетной книжки"));
         students.add(student);
     }
 }

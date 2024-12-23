@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GetFromManual implements IAction {
-    private  Generator generator;
+    private final Generator generator;
 
     public GetFromManual(Generator generator) {
         this.generator = generator;

@@ -1,7 +1,10 @@
 package action;
 
+import generator.Generator;
+
 import java.util.List;
+import java.util.Map;
 
 public interface IAction {
-    String act(String choise, List arr);
+    String act(Map<String, String> params);
 }

@@ -1,8 +1,11 @@
 package console;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import action.GetFromManual;
+import action.GetFromRandom;
+import action.IAction;
+import action.Print;
+
+import java.util.*;
 
 import static validation.validation.*;
 
@@ -13,10 +16,19 @@ public class ConsoleUI {
     private static final String EXIT = "0";
     private static final String ASK_CHOICE_METHOD = "Выберете способ заполнения массива: 1 - из файла, 2 - рандомно, 3 - вручную";
     private static final String ASK_LENGTH_ARR = "Задайте длину массива";
-    private static final String ASK_WHAT_TO_DO_NEXT = "Выберете способ заполнения массива: 1 - из файла, 2 - рандомно, 3 - вручную";
-    private static final String ASK_EXIT = "Если хотите выйти, нажмите 0";
-
+    private FillArrayByManualMethods methodsForUI = new FillArrayByManualMethods();
+    private GetFromManual getFromManual;
+    GetFromRandom getFromRandom;
+    private Print print;
     private final Scanner scanner = new Scanner(System.in);
+    IAction action;
+
+
+    public ConsoleUI(GetFromManual getFromManual, Print print, GetFromRandom getFromRandom) {
+        this.getFromManual = getFromManual;
+        this.getFromRandom = getFromRandom;
+        this.print = print;
+    }
 
     public void printMenu() {
         System.out.println("Что Вы хотите сделать?");
@@ -26,6 +38,10 @@ public class ConsoleUI {
         System.out.println("0-выход");
     }
 
+    private void showErrMessage() {
+        System.out.println("Вы что-то ввели не так");
+    }
+
     public void run() {
         String userAnswer = "";
 
@@ -33,10 +49,11 @@ public class ConsoleUI {
             printMenu();
             userAnswer = scanner.nextLine().strip().toLowerCase();
             switch (userAnswer) {
-                case FILL_ARR -> addArray();
-                case PRINT_ARR -> System.out.println("заглушка печатать массив");
+                case FILL_ARR -> createArray();
+                case PRINT_ARR -> printArray();
                 case SORT_ARR -> System.out.println("заглушка сортировать массив");
-                case EXIT -> {}
+                case EXIT -> {
+                }
                 default -> showErrMessage();
             }
 
@@ -82,30 +99,34 @@ public class ConsoleUI {
         return getTypeArray();
     }
 
-    public void addArray() {
+    public void createArray() {
         String typeArr = null;
-        Integer lenghtArr = 0;
+        Integer length = 0;
         String getMethod = getMethodOfFillArray();
-//        if (getMethod == null) {
-//            return;
-//        }
+
         if (validateMethod(getMethod)) {
             typeArr = getTypeArray();
         }
         if (validateType(typeArr)) {
-            lenghtArr = getLenghtArr();
+            length = getLenghtArr();
         }
         if (validateMethod(getMethod)) {
             switch (getMethod) {
                 case "1" -> addFile(typeArr);
-                case "2" -> addRandom(typeArr, lenghtArr);
-                case "3" -> addManual(typeArr, lenghtArr);
+                case "2" -> addRandom(typeArr, length);
+                case "3" -> addManual(typeArr, length);
             }
         }
     }
 
-    private void addRandom(String typeArr, Integer lenghtArr) {
-        System.out.println("rand");
+    private void addRandom(String typeArr, int length) {
+       // String typeArr = getTypeArray();
+      //  Integer length = getLenghtArr();
+        Map<String, String> temp = new HashMap<>();
+        temp.put("type", typeArr);
+        temp.put("length", String.valueOf(length));
+        String status = getFromRandom.act(temp);
+        System.out.println(status);
     }
 
     private void addFile(String typeArr) {
@@ -113,11 +134,34 @@ public class ConsoleUI {
 
     }
 
-    private void addManual(String typeArr, Integer lenghtArr) {
-        System.out.println("manual");
+    private void addManual(String typeArr, Integer lengthArr) {
+        for (int i = 0; i < lengthArr; i++) {
+            switch (typeArr) {
+                case "1" -> System.out.println("Заполняем данные автобуса" + (i + 1));
+                case "2" -> System.out.println("Заполняем данные юзера" + (i + 1));
+                case "3" -> System.out.println("Заполняем данные студента" + (i + 1));
+            }
+            Map<String, String> entity = methodsForUI.getEntitiesParamsFromManual(typeArr);
+            String status = getFromManual.act(entity);
+            System.out.println(status);
+        }
 
     }
-    private void showErrMessage() {
-        System.out.println("Вы что-то ввели не так");
+
+    private void printArray() {
+        String typeArr = getTypeArray();
+//        if (typeArr == null)
+//            return;
+//        if (!validateType(typeArr)) {
+//            showErrMessage();
+//            return;
+//        }
+
+        String status = print.act(new HashMap<>(Map.of("type", typeArr)));
+        System.out.println(status);
     }
 }
+
+
+
+

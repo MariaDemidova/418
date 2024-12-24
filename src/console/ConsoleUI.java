@@ -1,9 +1,6 @@
 package console;
 
-import action.GetFromManual;
-import action.GetFromRandom;
-import action.IAction;
-import action.Print;
+import action.*;
 
 import java.util.*;
 
@@ -51,7 +48,7 @@ public class ConsoleUI {
             switch (userAnswer) {
                 case FILL_ARR -> createArray();
                 case PRINT_ARR -> printArray();
-                case SORT_ARR -> System.out.println("заглушка сортировать массив");
+                case SORT_ARR -> sortArray();
                 case EXIT -> {
                 }
                 default -> showErrMessage();
@@ -160,6 +157,11 @@ public class ConsoleUI {
         String status = print.act(new HashMap<>(Map.of("type", typeArr)));
         System.out.println(status);
     }
+    private void sortArray() {
+    //    return Sort;
+    }
+
+
 }
 
 

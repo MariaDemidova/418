@@ -1,26 +1,23 @@
 package action;
 
-import generator.Generator;
-import temp.Bus;
+import util.ListsCreator;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class Print implements IAction {
-   private final Generator generator;
+   private final ListsCreator ListsCreator;
 
-    public Print(Generator generator) {
-        this.generator = generator;
+    public Print(ListsCreator ListsCreator) {
+        this.ListsCreator = ListsCreator;
     }
 
     @Override
     public String act(Map<String, String> entity) {
      return    switch (entity.get("type")) {
-            case "1" -> Arrays.asList(generator.buses).toString();
-            case "2" -> Arrays.asList(generator.users).toString();
-            case "3" -> Arrays.asList(generator.students).toString();
+            case "1" -> Arrays.asList(ListsCreator.buses).toString();
+            case "2" -> Arrays.asList(ListsCreator.users).toString();
+            case "3" -> Arrays.asList(ListsCreator.students).toString();
             default -> throw new IllegalArgumentException("Invalid type");//TODO
         };
 

@@ -2,7 +2,7 @@ package classes;
 
 public class Student {
     private final String group;
-    private final String gpa;
+    private final double gpa;
     private final String matriculationNumber;
 
     public Student(StudentBuilder studentBuilder) {
@@ -15,7 +15,7 @@ public class Student {
         return group;
     }
 
-    public String getGpa() {
+    public Double getGpa() {
         return gpa;
     }
 
@@ -25,7 +25,7 @@ public class Student {
 
     public static class StudentBuilder{
         private String group;
-        private String gpa;
+        private double gpa;
         private String matriculationNumber;
 
         public StudentBuilder group(String group) {
@@ -33,7 +33,7 @@ public class Student {
             return this;
         }
 
-        public StudentBuilder gpa(String gpa) {
+        public StudentBuilder gpa(double gpa) {
             this.gpa = gpa;
             return this;
         }

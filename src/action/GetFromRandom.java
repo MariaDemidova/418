@@ -1,75 +1,75 @@
 package action;
 
-import generator.Generator;
-import temp.Bus;
+import classes.Bus;
+import classes.Student;
+import classes.User;
+import util.ListsCreator;
 import temp.RandomBuses;
 import temp.RandomStudents;
 import temp.RandomUsers;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class GetFromRandom implements IAction {
-    private final Generator generator;
+    private final ListsCreator ListsCreator;
     Random rand = new Random();
     RandomBuses buses = new RandomBuses();
     RandomUsers users = new RandomUsers();
     RandomStudents students = new RandomStudents();
 
-    public GetFromRandom(Generator generator) {
-        this.generator = generator;
+    public GetFromRandom(ListsCreator ListsCreator) {
+        this.ListsCreator = ListsCreator;
     }
 
-    private Map<String, String> randomBus() {
-        Map<String, String> bus = new HashMap();
-
+    private Bus randomBus() {
+        Bus.BusBuilder bus = new Bus.BusBuilder();
         String[] numbers = buses.getRandomNumbers();
         String[] models = buses.getRandomModels();
-        String[] km = buses.getRandomKM();
-        bus.put("номер", numbers[rand.nextInt(buses.getRandomNumbers().length)]);
-        bus.put("модель", models[rand.nextInt(buses.getRandomModels().length)]);
-        bus.put("пробег", km[rand.nextInt(buses.getRandomKM().length)]);
-        return bus;
+        int[] km = buses.getRandomKM();
+
+        bus.licensePlate(numbers[rand.nextInt(numbers.length)]);
+        bus.model(models[rand.nextInt(numbers.length)]);
+        bus.mileage(km[rand.nextInt(numbers.length)]);
+
+        return bus.build();
     }
 
-    private Map<String, String> randomStudent() {
-        Map<String, String> student = new HashMap();
-
-        String[] groupNumbers = students.getRandomGroupNumbers();
-        double[] GPAs = students.getRandomGPAs();
-        int[] numbers = students.getRandomNumber();
-
-        student.put("номер группы", groupNumbers[rand.nextInt(students.getRandomNumber().length)]);
-        student.put("средний балл", String.valueOf(GPAs[rand.nextInt(students.getRandomGPAs().length)]));
-        student.put("номер зачетной книжки", String.valueOf(numbers[rand.nextInt(students.getRandomNumber().length)]));
-        return student;
-    }
-
-    private Map<String, String> randomUser() {
-        Map<String, String> user = new HashMap();
-
+    private User randomUser() {
+        User.UserBuilder userBuilder = new User.UserBuilder();
         String[] names = users.getRandomNames();
         String[] passwords = users.getRandomPassword();
         String[] emails = users.getRandomEmail();
 
-        user.put("имя", names[rand.nextInt(users.getRandomNames().length)]);
-        user.put("пароль", passwords[rand.nextInt(users.getRandomPassword().length)]);
-        user.put("почта", emails[rand.nextInt(users.getRandomEmail().length)]);
-        return user;
+        userBuilder.name(names[rand.nextInt(names.length)]);
+        userBuilder.password(passwords[rand.nextInt(passwords.length)]);
+        userBuilder.mail(emails[rand.nextInt(emails.length)]);
+
+        return userBuilder.build();
     }
 
+    private Student randomStudent() {
+        Student.StudentBuilder student = new Student.StudentBuilder();
+
+        String[] groupNumbers = students.getRandomGroupNumbers();
+        double[] GPAs = students.getRandomGPAs();
+        String[] numbers = students.getRandomNumber();
+
+        student.group(groupNumbers[rand.nextInt(numbers.length)]);
+        student.gpa(GPAs[rand.nextInt(numbers.length)]);
+        student.matriculationNumber(numbers[rand.nextInt(numbers.length)]);
+
+        return student.build();
+    }
 
     private String generateArr(String type, int length) {
 
         for (int i = 0; i < length; i++) {
             switch (type) {
-                case "1" -> generator.generateBus(randomBus());
-                case "2" -> generator.generateUser(randomUser());
-                case "3" -> generator.generateStudent(randomStudent());
-
+                case "1" -> ListsCreator.addBus(randomBus());
+                case "2" -> ListsCreator.addUser(randomUser());
+                case "3" -> ListsCreator.addStudent(randomStudent());
             }
-
         }
         return "рандомный массив сформирован";
     }

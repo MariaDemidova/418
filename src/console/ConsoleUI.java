@@ -13,16 +13,15 @@ public class ConsoleUI {
     private static final String FILL_ARR = "1";
     private static final String PRINT_ARR = "2";
     private static final String SORT_ARR = "3";
-    private static final String EXIT = "0";
+    private static final String EXIT = "9";
     private static final String ASK_CHOICE_METHOD = "Выберете способ заполнения массива: 1 - из файла, 2 - рандомно, 3 - вручную";
     private static final String ASK_LENGTH_ARR = "Задайте длину массива";
-    private FillArrayByManualMethods methodsForUI = new FillArrayByManualMethods();
-    private GetFromManual getFromManual;
-    GetFromRandom getFromRandom;
-    private Print print;
-    private final Scanner scanner = new Scanner(System.in);
-    IAction action;
 
+    private final FillArrayByManualMethods methodsForUI = new FillArrayByManualMethods();
+    private final GetFromManual getFromManual;
+    private final GetFromRandom getFromRandom;
+    private final Print print;
+    private final Scanner scanner = new Scanner(System.in);
 
     public ConsoleUI(GetFromManual getFromManual, Print print, GetFromRandom getFromRandom) {
         this.getFromManual = getFromManual;
@@ -47,6 +46,7 @@ public class ConsoleUI {
 
         while (!userAnswer.strip().equalsIgnoreCase(EXIT)) {
             printMenu();
+
             userAnswer = scanner.nextLine().strip().toLowerCase();
             switch (userAnswer) {
                 case FILL_ARR -> createArray();
@@ -56,7 +56,6 @@ public class ConsoleUI {
                 }
                 default -> showErrMessage();
             }
-
         }
     }
 

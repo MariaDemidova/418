@@ -1,6 +1,6 @@
 package classes;
 
-public class User {
+public class User implements Comparable<User>{
     private final String name;
     private final String password;
     private final String mail;
@@ -21,6 +21,17 @@ public class User {
 
     public String getMail() {
         return mail;
+    }
+
+    @Override
+    public int compareTo(User o) {
+        int result=this.name.compareTo(o.name);
+        return result;
+    }
+
+    @Override
+    public String toString(){
+        return (name+", mail: "+mail+", password: "+ password);
     }
 
     public static class UserBuilder{

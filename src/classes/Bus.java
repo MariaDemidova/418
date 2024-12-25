@@ -1,6 +1,6 @@
 package classes;
 
-public class Bus {
+public class Bus implements Comparable<Bus> {
     private final String licensePlate;
     private final String model;
     private final int mileage;
@@ -21,6 +21,16 @@ public class Bus {
 
     public int getMileage() {
         return mileage;
+    }
+    @Override
+    public int compareTo(Bus o) {
+        int result=this.licensePlate.compareTo(o.licensePlate);
+        return result;
+    }
+
+    @Override
+    public String toString(){
+        return (licensePlate+", "+model+", "+ mileage+" km");
     }
 
     public static class BusBuilder{

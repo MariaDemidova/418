@@ -1,8 +1,8 @@
 package classes;
 
-public class Student {
+public class Student implements Comparable<Student>{
     private final String group;
-    private final String gpa;
+    private final double gpa;
     private final String matriculationNumber;
 
     public Student(StudentBuilder studentBuilder) {
@@ -15,7 +15,7 @@ public class Student {
         return group;
     }
 
-    public String getGpa() {
+    public double getGpa() {
         return gpa;
     }
 
@@ -23,9 +23,20 @@ public class Student {
         return matriculationNumber;
     }
 
+    @Override
+    public int compareTo(Student o) {
+        int result=(int)(this.gpa-(o.gpa));
+        return result;
+    }
+
+    @Override
+    public String toString(){
+        return (matriculationNumber+", "+group+", gpa: "+ gpa);
+    }
+
     public static class StudentBuilder{
         private String group;
-        private String gpa;
+        private double gpa;
         private String matriculationNumber;
 
         public StudentBuilder group(String group) {
@@ -33,7 +44,7 @@ public class Student {
             return this;
         }
 
-        public StudentBuilder gpa(String gpa) {
+        public StudentBuilder gpa(double gpa) {
             this.gpa = gpa;
             return this;
         }

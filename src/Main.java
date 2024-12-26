@@ -1,20 +1,34 @@
-import action.GetFromManual;
-import action.GetFromRandom;
-import action.Print;
-import console.ConsoleUI;
-import generator.Generator;
+import application.action.*;
+import UI.ConsoleUI;
+import data.ListsCreator;
 
+import java.util.HashMap;
+import java.util.Map;
 
-
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
 
-    public static Generator generator = new Generator();
+    private final Map<UserChoice, IAction> choiceAndAction = new HashMap<>();
+    public static ListsCreator listsCreator = new ListsCreator();
 
+    public void addChoice(UserChoice choice, IAction action) {
+
+        choiceAndAction.put(choice, action);
+    }
+
+    public void run() {
+        ConsoleUI consoleUI = new ConsoleUI(choiceAndAction);
+        consoleUI.run();
+    }
 
     public static void main(String[] args) {
-        ConsoleUI ui = new ConsoleUI(new GetFromManual(generator), new Print(generator), new GetFromRandom(generator));
-        ui.run();
+        Main main = new Main();
+        main.addChoice(UserChoice.GET_FROM_FILE, new GetFromFile(listsCreator));
+        main.addChoice(UserChoice.GET_FROM_RANDOM, new GetFromRandom(listsCreator));
+        main.addChoice(UserChoice.GET_FROM_MANUAL, new GetFromManual(listsCreator));
+        main.addChoice(UserChoice.PRINT, new Print(listsCreator));
+        main.addChoice(UserChoice.FIND, new Find(listsCreator));
+        main.addChoice(UserChoice.SORT, new SortBySelection(listsCreator));
+
+        main.run();
     }
 }

@@ -1,29 +1,29 @@
 package console;
 
 import action.*;
+import util.Checker;
 
 import java.util.*;
 
-import static validation.validation.*;
 
 public class ConsoleUI {
     private static final String FILL_ARR = "1";
     private static final String PRINT_ARR = "2";
-    private static final String SORT_ARR = "3";
+    private static final String SORT = "4";
+    private static final String SORT_DOP = "5";
+    private static final String FIND = "6";
     private static final String EXIT = "9";
     private static final String ASK_CHOICE_METHOD = "Выберете способ заполнения массива: 1 - из файла, 2 - рандомно, 3 - вручную";
     private static final String ASK_LENGTH_ARR = "Задайте длину массива";
 
     private final FillArrayByManualMethods methodsForUI = new FillArrayByManualMethods();
-    private final GetFromManual getFromManual;
-    private final GetFromRandom getFromRandom;
-    private final Print print;
+
     private final Scanner scanner = new Scanner(System.in);
 
-    public ConsoleUI(GetFromManual getFromManual, Print print, GetFromRandom getFromRandom) {
-        this.getFromManual = getFromManual;
-        this.getFromRandom = getFromRandom;
-        this.print = print;
+    Map<UserChoice, IAction> choiceActions;
+
+    public ConsoleUI(Map<UserChoice, IAction> choiceActions) {
+        this.choiceActions = choiceActions;
     }
 
     public void printMenu() {
@@ -31,6 +31,8 @@ public class ConsoleUI {
         System.out.println("1-создать массив");
         System.out.println("2-напечатать массив");
         System.out.println("3-сортировать массив");
+        System.out.println("4-найти элемент массива");
+        System.out.println("5-сортировать массив по доп заданию");
         System.out.println("0-выход");
     }
 
@@ -48,7 +50,9 @@ public class ConsoleUI {
             switch (userAnswer) {
                 case FILL_ARR -> createArray();
                 case PRINT_ARR -> printArray();
-                case SORT_ARR -> sortArray();
+                case SORT -> sortArray();
+                case SORT_DOP -> sortDop();
+                case FIND -> binarySearch();
                 case EXIT -> {
                 }
                 default -> showErrMessage();
@@ -56,7 +60,22 @@ public class ConsoleUI {
         }
     }
 
-    public Integer getLenghtArr() {
+
+
+    public String getMethodOfFillArray() {
+        System.out.println(ASK_CHOICE_METHOD);
+        String userAnswer = scanner.nextLine();
+
+        if (Checker.checkValidMethod(userAnswer)) {
+            return userAnswer;
+        } else if (userAnswer.equals("0"))
+            return null;
+
+        showErrMessage();
+        return getMethodOfFillArray();
+    }
+
+    public Integer getLengthArr() {
         System.out.println(ASK_LENGTH_ARR);
         String userAnswer = scanner.nextLine().strip().toLowerCase();
         if (userAnswer.matches("[-+]?\\d+")) {
@@ -67,61 +86,48 @@ public class ConsoleUI {
                 return null;
         }
         showErrMessage();
-        return getLenghtArr();
+        return getLengthArr();
 
-    }
-
-    public String getMethodOfFillArray() {
-        System.out.println(ASK_CHOICE_METHOD);
-        String userAnswer = scanner.nextLine().strip().toLowerCase();
-        if (validateMethod(userAnswer)) {
-            return userAnswer;
-        } else if (userAnswer.equals("0"))
-            return null;
-
-        showErrMessage();
-        return getMethodOfFillArray();
     }
 
     public String getTypeArray() {
         System.out.println("Выберите тип объектов 1-bus. 2-User, 3-Student ");
         String userAnswer = scanner.nextLine().strip().toLowerCase();
 
-        if (validateType(userAnswer)) {
+        if (Checker.checkValidType(userAnswer)) {
             return userAnswer;
-        } else if (userAnswer.equals("0"))
-            return null;
-        showErrMessage();
+        } else showErrMessage();
+
         return getTypeArray();
     }
 
     public void createArray() {
         String typeArr = null;
         Integer length = 0;
+
         String getMethod = getMethodOfFillArray();
 
-        if (validateMethod(getMethod)) {
+        if (Checker.checkValidMethod(getMethod)) {
             typeArr = getTypeArray();
         }
-        if (validateType(typeArr)) {
-            length = getLenghtArr();
+        if (Checker.checkValidType(typeArr)) {
+            length = getLengthArr();
         }
-        if (validateMethod(getMethod)) {
+        if (Checker.checkValidMethod(getMethod)) {
             switch (getMethod) {
                 case "1" -> addFile(typeArr);
                 case "2" -> addRandom(typeArr, length);
-                case "3" -> addManual(typeArr, length);
+                case "3" -> getManual(typeArr, length);
             }
         }
     }
 
     private void addRandom(String typeArr, int length) {
-       // String typeArr = getTypeArray();
-      //  Integer length = getLenghtArr();
+
         Map<String, String> temp = new HashMap<>();
         temp.put("type", typeArr);
         temp.put("length", String.valueOf(length));
-        String status = getFromRandom.act(temp);
+        String status = choiceActions.get(UserChoice.GET_FROM_RANDOM).act(temp);
         System.out.println(status);
     }
 
@@ -130,7 +136,7 @@ public class ConsoleUI {
 
     }
 
-    private void addManual(String typeArr, Integer lengthArr) {
+    private void getManual(String typeArr, Integer lengthArr) {
         for (int i = 0; i < lengthArr; i++) {
             switch (typeArr) {
                 case "1" -> System.out.println("Заполняем данные автобуса" + (i + 1));
@@ -138,7 +144,7 @@ public class ConsoleUI {
                 case "3" -> System.out.println("Заполняем данные студента" + (i + 1));
             }
             Map<String, String> entity = methodsForUI.getEntitiesParamsFromManual(typeArr);
-            String status = getFromManual.act(entity);
+            String status = choiceActions.get(UserChoice.GET_FROM_MANUAL).act(entity);
             System.out.println(status);
         }
 
@@ -146,18 +152,32 @@ public class ConsoleUI {
 
     private void printArray() {
         String typeArr = getTypeArray();
-//        if (typeArr == null)
-//            return;
-//        if (!validateType(typeArr)) {
-//            showErrMessage();
-//            return;
-//        }
+        if (typeArr == null)
+            return;
+        if (!Checker.checkValidType(typeArr)) {
+            showErrMessage();
+            return;
+        }
 
-        String status = print.act(new HashMap<>(Map.of("type", typeArr)));
+        String status = choiceActions.get(UserChoice.PRINT).act(new HashMap<>(Map.of("type", typeArr)));
         System.out.println(status);
     }
+
+    private void binarySearch() {
+        String type = getTypeArray();
+        if (type == null)
+            return;
+
+        System.out.printf("Ищем элемент типа ", type);
+        Map<String, String> entity = methodsForUI.getEntitiesParamsFromManual(type);
+        String response = choiceActions.get(UserChoice.FIND).act(entity);
+        System.out.println(response);
+
+    }
     private void sortArray() {
-    //    return Sort;
+    }
+
+    private void sortDop() {
     }
 
 

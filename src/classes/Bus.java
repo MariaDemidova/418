@@ -1,6 +1,6 @@
 package classes;
 
-public class Bus {
+public class Bus implements Comparable<Bus> {
     private final String licensePlate;
     private final String model;
     private final int mileage;
@@ -23,26 +23,48 @@ public class Bus {
         return mileage;
     }
 
-    public static class BusBuilder{
+    @Override
+    public int compareTo(Bus busToCompare) {
+
+        if (!this.licensePlate.equalsIgnoreCase(busToCompare.licensePlate))
+            return this.licensePlate.compareTo(busToCompare.licensePlate);
+
+        if (this.mileage != busToCompare.mileage) {
+            return Integer.compare(this.mileage, busToCompare.mileage);
+        }
+        return this.model.compareTo(busToCompare.model);
+    }
+
+    @Override
+    public String toString() {
+        return "Автобус{" +
+                "номер='" + licensePlate + '\'' +
+                ", модель='" + model + '\'' +
+                ", пробег=" + mileage +
+                '}';
+    }
+
+    public static class BusBuilder {
         private String licensePlate;
         private String model;
         private int mileage;
 
-        public BusBuilder licensePlate(String licensePlate){
-            this.licensePlate=licensePlate;
+        public BusBuilder licensePlate(String licensePlate) {
+            this.licensePlate = licensePlate;
             return this;
         }
 
-        public BusBuilder model(String model){
-            this.model=model;
-            return this;
-        }
-        public BusBuilder mileage(int mileage){
-            this.mileage=mileage;
+        public BusBuilder model(String model) {
+            this.model = model;
             return this;
         }
 
-        public Bus build(){
+        public BusBuilder mileage(int mileage) {
+            this.mileage = mileage;
+            return this;
+        }
+
+        public Bus build() {
             return new Bus(this);
         }
     }

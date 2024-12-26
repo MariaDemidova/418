@@ -1,6 +1,6 @@
 package classes;
 
-public class User {
+public class User implements Comparable<User> {
     private final String name;
     private final String password;
     private final String mail;
@@ -13,6 +13,17 @@ public class User {
         name = userBuilder.name;
         password = userBuilder.password;
         mail = userBuilder.mail;
+    }
+
+    @Override
+    public int compareTo(User userToCompare) {
+        if(!this.name.equals(userToCompare.name)) {
+            return this.name.compareTo(userToCompare.name);
+        }
+        if(!this.password.equals(userToCompare.password)) {
+            return this.password.compareTo(userToCompare.password);
+        }
+        return this.mail.compareTo(userToCompare.mail);
     }
 
     public String getPassword() {

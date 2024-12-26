@@ -1,16 +1,33 @@
-import action.GetFromManual;
-import action.GetFromRandom;
-import action.Print;
+import action.*;
 import console.ConsoleUI;
 import util.ListsCreator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Main {
 
-    public static ListsCreator ListsCreator = new ListsCreator();
+    private final Map<UserChoice, IAction> choiceAndAction = new HashMap<>();
+    public static ListsCreator listsCreator = new ListsCreator();
 
+    public void addChoice(UserChoice choice, IAction action) {
+
+        choiceAndAction.put(choice, action);
+    }
+
+    public void run() {
+        ConsoleUI consoleUI = new ConsoleUI(choiceAndAction);
+        consoleUI.run();
+    }
 
     public static void main(String[] args) {
-        ConsoleUI ui = new ConsoleUI(new GetFromManual(ListsCreator), new Print(ListsCreator), new GetFromRandom(ListsCreator));
-        ui.run();
+        Main main = new Main();
+        main.addChoice(UserChoice.GET_FROM_FILE, new GetFromFile(listsCreator));
+        main.addChoice(UserChoice.GET_FROM_RANDOM, new GetFromRandom(listsCreator));
+        main.addChoice(UserChoice.GET_FROM_MANUAL, new GetFromManual(listsCreator));
+        main.addChoice(UserChoice.PRINT, new Print(listsCreator));
+        main.addChoice(UserChoice.FIND, new Find(listsCreator));
+//        main.addChoice(UserChoice.SORT, new Sort(listsCreator));
+        main.run();
     }
 }

@@ -15,7 +15,7 @@ public class UserGenerator {
 
         userBuilder.name(entity.get("имя"));
         userBuilder.password(entity.get("пароль"));
-        userBuilder.mail(entity.get("пароль"));
+        userBuilder.mail(entity.get("почта"));
         return userBuilder.build();
     }
 }

@@ -4,9 +4,9 @@ import classes.Bus;
 import classes.Student;
 import classes.User;
 import util.ListsCreator;
-import temp.RandomBuses;
-import temp.RandomStudents;
-import temp.RandomUsers;
+import randomEntity.RandomBuses;
+import randomEntity.RandomStudents;
+import randomEntity.RandomUsers;
 
 import java.util.Map;
 import java.util.Random;

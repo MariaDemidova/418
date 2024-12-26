@@ -1,6 +1,6 @@
 package classes;
 
-public class Student {
+public class Student implements Comparable<Student>{
     private final String group;
     private final double gpa;
     private final String matriculationNumber;
@@ -9,6 +9,14 @@ public class Student {
         group = studentBuilder.group;
         gpa = studentBuilder.gpa;
         matriculationNumber = studentBuilder.matriculationNumber;
+    }
+    @Override
+    public int compareTo(Student studToCompare) {
+        if(!group.equals(studToCompare.group))
+            return group.compareTo(studToCompare.group);
+        if (gpa != studToCompare.gpa)
+            return Double.compare(this.gpa, studToCompare.gpa);
+        return matriculationNumber.compareTo(studToCompare.matriculationNumber);
     }
 
     public String getGroup() {

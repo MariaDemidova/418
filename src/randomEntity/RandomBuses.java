@@ -1,4 +1,4 @@
-package temp;
+package randomEntity;
 
 public class RandomBuses {
     private static final String[] NUMBER = new String[]{

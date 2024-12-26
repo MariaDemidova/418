@@ -1,6 +1,6 @@
-import action.*;
-import console.ConsoleUI;
-import util.ListsCreator;
+import application.action.*;
+import UI.ConsoleUI;
+import data.ListsCreator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,8 @@ public class Main {
         main.addChoice(UserChoice.GET_FROM_MANUAL, new GetFromManual(listsCreator));
         main.addChoice(UserChoice.PRINT, new Print(listsCreator));
         main.addChoice(UserChoice.FIND, new Find(listsCreator));
-//        main.addChoice(UserChoice.SORT, new Sort(listsCreator));
+        main.addChoice(UserChoice.SORT, new SortBySelection(listsCreator));
+
         main.run();
     }
 }

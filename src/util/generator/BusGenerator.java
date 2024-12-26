@@ -1,6 +1,6 @@
 package util.generator;
 
-import classes.Bus;
+import data.classes.Bus;
 import util.DataError;
 
 import java.util.Map;

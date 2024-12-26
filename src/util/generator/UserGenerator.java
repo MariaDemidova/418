@@ -1,6 +1,6 @@
 package util.generator;
 
-import classes.User;
+import data.classes.User;
 import util.DataError;
 
 import java.util.Map;

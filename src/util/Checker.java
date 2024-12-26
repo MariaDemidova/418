@@ -5,6 +5,15 @@ import java.util.Map;
 
 public class Checker {
 
+
+    public static void check(Map<String, String> model, String type) throws DataError {
+        switch (type) {
+            case "1" -> checkBus(model);
+            case "2" -> checkUser(model);
+            case "3" -> checkStudent(model);
+        }
+    }
+
     public static boolean checkBus(Map<String, String> model) throws DataError {
         String licensePlate = model.get("номер");
         if (licensePlate == null)
@@ -65,7 +74,7 @@ public class Checker {
         if (gpa == null)
             throw new DataError("Нужно поле gpa");
 
-        if (!gpa.matches("[0-9]+")) {
+        if (!gpa.matches("[0-9]{1,13}(\\.[0-9]*)?")) {
             throw new DataError("средний балл должен быть double значением больше нуля");
         }
 
@@ -88,11 +97,6 @@ public class Checker {
         return true;
     }
 
-
-    public static boolean checkMainMenuAnswer(String inputMethod) {
-        return (Arrays.asList("1", "2", "3", "4").contains(inputMethod));
-    }
-
     public static boolean checkValidType(String type) {
 
         return (Arrays.asList("1", "2", "3").contains(type));
@@ -100,5 +104,9 @@ public class Checker {
 
     public static boolean checkValidMethod(String inputMethod) {
         return (Arrays.asList("1", "2", "3", "4").contains(inputMethod));
+    }
+    public static boolean checkValidParam(String type) {
+
+        return (Arrays.asList("1", "2", "3").contains(type));
     }
 }

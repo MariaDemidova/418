@@ -23,12 +23,24 @@ public class Student implements Comparable<Student>{
         return group;
     }
 
+    public double getGpa() {
     public Double getGpa() {
         return gpa;
     }
 
     public String getMatriculationNumber() {
         return matriculationNumber;
+    }
+
+    @Override
+    public int compareTo(Student o) {
+        int result=(int)(this.gpa-(o.gpa));
+        return result;
+    }
+
+    @Override
+    public String toString(){
+        return (matriculationNumber+", "+group+", gpa: "+ gpa);
     }
 
     public static class StudentBuilder{

@@ -22,6 +22,16 @@ public class Bus implements Comparable<Bus> {
     public int getMileage() {
         return mileage;
     }
+    @Override
+    public int compareTo(Bus o) {
+        int result=this.licensePlate.compareTo(o.licensePlate);
+        return result;
+    }
+
+    @Override
+    public String toString(){
+        return (licensePlate+", "+model+", "+ mileage+" km");
+    }
 
     @Override
     public int compareTo(Bus busToCompare) {

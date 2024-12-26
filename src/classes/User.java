@@ -34,6 +34,17 @@ public class User implements Comparable<User> {
         return mail;
     }
 
+    @Override
+    public int compareTo(User o) {
+        int result=this.name.compareTo(o.name);
+        return result;
+    }
+
+    @Override
+    public String toString(){
+        return (name+", mail: "+mail+", password: "+ password);
+    }
+
     public static class UserBuilder{
         private String name;
         private String password;
